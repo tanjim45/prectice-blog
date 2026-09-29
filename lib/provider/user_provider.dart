@@ -1,30 +1,32 @@
 import 'package:flutter/foundation.dart';
-
 import '../di/injection.dart';
-import '../domain/entetis/user_entity.dart';
+import 'user_state.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserEntity? user;
-
-  bool isLoading = false;
-
-  String? errorMessage;
+  UserState state = UserState();
 
   Future<void> getUser(String userId) async {
-    isLoading = true;
-    errorMessage = null;
+    state = UserState(
+      isLoading: true,
+    );
 
     notifyListeners();
 
     try {
       final getUser = Injection.getUser();
 
-      user = await getUser(userId);
-    } catch (e) {
-      errorMessage = e.toString();
-    }
+      final user = await getUser(userId);
 
-    isLoading = false;
+      state = UserState(
+        user: user,
+        isLoading: false,
+      );
+    } catch (e) {
+      state = UserState(
+        isLoading: false,
+        errorMessage: e.toString(),
+      );
+    }
 
     notifyListeners();
   }
