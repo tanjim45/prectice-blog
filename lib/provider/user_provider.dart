@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
+
 import '../di/injection.dart';
 import 'user_state.dart';
+import 'user_status.dart';
 
 class UserProvider extends ChangeNotifier {
   UserState state = UserState();
 
   Future<void> getUser(String userId) async {
     state = UserState(
-      isLoading: true,
+      status: UserStatus.loading,
     );
 
     notifyListeners();
@@ -18,12 +20,12 @@ class UserProvider extends ChangeNotifier {
       final user = await getUser(userId);
 
       state = UserState(
+        status: UserStatus.success,
         user: user,
-        isLoading: false,
       );
     } catch (e) {
       state = UserState(
-        isLoading: false,
+        status: UserStatus.error,
         errorMessage: e.toString(),
       );
     }

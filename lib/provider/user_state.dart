@@ -1,13 +1,14 @@
 import '../domain/entetis/user_entity.dart';
+import 'user_status.dart';
 
 class UserState {
+  final UserStatus status;
   final UserEntity? user;
-  final bool isLoading;
   final String? errorMessage;
 
   UserState({
+    this.status = UserStatus.initial,
     this.user,
-    this.isLoading = false,
     this.errorMessage,
   });
 }
